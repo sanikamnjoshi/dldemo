@@ -1,2 +1,5 @@
 DEFAULT:
   mongo_database: dldemo
+
+collection:
+  temp: !connect mongodb://temp
