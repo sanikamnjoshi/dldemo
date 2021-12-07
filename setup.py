@@ -9,7 +9,10 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        "core4 @ git+https://github.com/plan-net/core4.git#egg=core4"
+        "core4 @ git+https://github.com/plan-net/core4.git#egg=core4",
+        "openpyxl",
+        "matplotlib",
+        "bs4"
     ],
     extras_require={
         "tests": [
