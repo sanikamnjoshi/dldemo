@@ -3,3 +3,7 @@ DEFAULT:
 
 collection:
   temp: !connect mongodb://temp
+  data: !connect mongodb://xlsx
+
+api:
+  admin_password: hans
