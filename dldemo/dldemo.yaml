@@ -2,8 +2,9 @@ DEFAULT:
   mongo_database: dldemo
 
 collection:
-  temp: !connect mongodb://temp
   data: !connect mongodb://xlsx
+  temp: !connect mongodb://temp
+
 
 api:
   admin_password: hans
