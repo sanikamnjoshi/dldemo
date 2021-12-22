@@ -1,5 +1,3 @@
-
-
 class Person:
   def __init__(self, fname, lname):
     self.firstname = fname
@@ -12,9 +10,9 @@ class Person:
     return self.firstname + ", " + self.lastname
 
 
-
 x = Person("Emma", "Haddi")
 print(x.makename())
+
 
 class Student(Person):
   pass

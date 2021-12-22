@@ -1,1 +1,0 @@
-from dldemo.download.script1 import compute_multipy, compute_sum

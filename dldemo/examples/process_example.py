@@ -6,14 +6,12 @@ import concurrent.futures
 from core4.queue.helper.functool import enqueue
 import datetime
 
-
 class ProcessFiles(CoreJob):
     author = "eha"
     max_parallel = 10
 
     def execute(self, *args, **kwargs):
         """
-
         :param args:
         :param kwargs:
         :return:
@@ -25,7 +23,6 @@ class ProcessFiles(CoreJob):
         self.process(file_list[0])
 
 
-
     def process(self, filename):
         """
         This function processes the excel files and
@@ -33,7 +30,6 @@ class ProcessFiles(CoreJob):
         :param filename:
         :return:
         """
-
         # get the last version of the file form the database
         fh = self.gfs.get_last_version(filename)
         body = BytesIO(fh.read())
@@ -42,7 +38,6 @@ class ProcessFiles(CoreJob):
         df = pd.read_excel(body, header=None)
         # do some processing
         print(df.shape)
-
 
 
 if __name__ == '__main__':
