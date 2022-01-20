@@ -2,8 +2,9 @@ DEFAULT:
   mongo_database: dldemo
 
 collection:
-  data: !connect mongodb://xlsx
+  data: !connect mongodb://data
   temp: !connect mongodb://temp
+  data_processed: !connect mongodb://data_processed
 
 
 api:
