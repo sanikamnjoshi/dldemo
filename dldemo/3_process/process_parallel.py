@@ -25,7 +25,7 @@ class ProcessFiles(CoreJob):
     author = "mra"
     max_parallel = 10
 
-    def execute(self, *args, **kwargs):
+    def execute(self, scope=None, parallel=False, chunk_size=10, *args, **kwargs):
         """
 
         :param test: control, if test don't write data to mongoDB
@@ -40,10 +40,18 @@ class ProcessFiles(CoreJob):
         # define database
         self.target = self.config.dldemo.collection.data
         self.gfs = GridFS(self.target.connection[self.target.database])
-        # list of exsisting files in the database
-        files = self.gfs.list()
-        self.extract(files)
-
+        if scope is None:
+            files = self.gfs.list()
+            if parallel:
+                chunks = [files[i:i + chunk_size] for i in range(0, len(files), chunk_size)]
+                self.logger.info("found [%d] files to extract in [%d] chunks", len(files), len(chunks))
+                # for each chunk start the ProcessFile Job
+                for chunk in chunks:
+                    enqueue(ProcessFiles, scope=chunk)
+            else:
+                self.extract(files)
+        else:
+            self.extract(scope)
 
     def extract(self, files):
         """
@@ -109,16 +117,6 @@ class ProcessFiles(CoreJob):
         d["Vorfilter"] = vorfilter
         d["Zielgruppe"] = zielgruppe
 
-        monat = d.Zeitraum.apply(
-            lambda s: s.replace("Letzter Monat (", "").replace(")",
-                                                               "").split())
-        d["Monat"] = [
-            datetime.datetime.strptime("01." + MONAT[m[0]] + "." + m[1],
-                                       "%d.%m.%Y") for m in monat]
-        d["val"] = d["Kontakte Mio"].apply(pd.to_numeric,
-                                                     errors='coerce')
-        d['Date'] = d.Monat.apply(lambda x: x.date().isoformat())
-
         doc = d.to_dict("records")
         n = 0
         # delete any previous version of the file in the database
@@ -140,4 +138,4 @@ class ProcessFiles(CoreJob):
 
 if __name__ == '__main__':
     from core4.queue.helper.functool import execute
-    execute(ProcessFiles)
+    execute(ProcessFiles, parallel=True)
