@@ -1,3 +1,5 @@
 # specify any non Python files (not *.py) with the following instruction
 # recursive-include dldemo/ *
 include dldemo/dldemo.yaml
+include dldemo/examples/template/xls-d.html
+include dldemo/examples/template/base3.html

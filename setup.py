@@ -12,7 +12,8 @@ setup(
         "core4 @ git+https://github.com/plan-net/core4.git#egg=core4",
         "openpyxl",
         "matplotlib",
-        "bs4"
+        "bs4",
+        "bokeh"
     ],
     extras_require={
         "tests": [
