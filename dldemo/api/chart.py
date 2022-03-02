@@ -1,9 +1,8 @@
-import json
+
 import pandas as pd
 import numpy as np
 import datetime
 
-from core4.api.v1.application import CoreApiContainer
 from core4.api.v1.request.main import CoreRequestHandler
 
 from bokeh.plotting import figure
@@ -13,7 +12,7 @@ from bokeh.models import ColumnDataSource, HoverTool
 from bokeh.layouts import gridplot
 from bokeh.transform import dodge
 
-from dldemo.examples.functions_example import compute_sum
+
 
 MONAT = {
     "Januar": "01",
@@ -29,65 +28,6 @@ MONAT = {
     "November": "11",
     "Dezember": "12"
 }
-
-class SumHandler(CoreRequestHandler):
-    '''
-    Sum Demo
-    '''
-
-    author = "mmo"
-    title = "Sum Example"
-
-    def get(self):
-
-        a = self.get_argument('a', as_type=int)
-        b = self.get_argument('b', as_type=int)
-        res = compute_sum(a, b)
-
-        self.reply(res)
-
-
-class TableHandler(CoreRequestHandler):
-    """
-    Table Demo
-    """
-    author = "mmo"
-    title = "Agof Table Example"
-
-    async def get(self):
-
-        # Access to the processed data
-        collection = self.config.dldemo.collection.data # self.target
-        cursor = collection.find()
-        data = await cursor.to_list(length = 10) # length = None - all documents in the database
-        # data = await self.config.dldemo.collection.data.find().to_list(length = 10) # single line version
-
-        # Data to pandas df
-        df = pd.DataFrame(data)
-
-        self.reply(df)
-
-
-class TableFilterHandler(CoreRequestHandler):
-    """
-    Table Filter Demo
-    """
-    author = "mmo"
-    title = "Agof Table with filter Example"
-
-    async def get(self):
-
-        # Filter
-        query = self.get_argument("query", as_type=dict, default={})
-
-        # Access to the processed data
-        data = await self.config.dldemo.collection.data.find(query).to_list(length = 1000)
-
-        # Data to pandas df
-        df = pd.DataFrame(data)
-
-        await self.render("template/xls-d.html", df=df, query=json.dumps(query))
-
 
 class ChartHandler(CoreRequestHandler):
     """
@@ -145,7 +85,8 @@ class ChartHandler(CoreRequestHandler):
 
             self.reply(json_item(p, "myplot"))
         else:
-            await self.render("template/base3.html", rsc=CDN.render(), mytitle='Demo Chart')
+            await self.render("templates/base3.html", rsc=CDN.render(), mytitle='Demo Chart')
+
 
 
 class MultiChartHandler(CoreRequestHandler):
@@ -252,20 +193,6 @@ class MultiChartHandler(CoreRequestHandler):
             self.reply(json_item(grid_plot, "myplot"))
 
         else:
-            await self.render("template/base4.html", rsc=CDN.render(), mytitle='Demo Chart')
+            await self.render("templates/base4.html", rsc=CDN.render(), mytitle='Demo Chart')
 
 
-class MyServer(CoreApiContainer):
-    root = "/dldemo/examples"
-    rules = [
-        ("/sum", SumHandler),
-        ("/table", TableHandler),
-        ("/table_filter", TableFilterHandler),
-        ("/chart", ChartHandler),
-        ("/chart_multiple", MultiChartHandler),
-    ]
-
-if __name__ == '__main__':
-    from core4.api.v1.tool.functool import serve
-
-    serve(MyServer)

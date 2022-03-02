@@ -3,3 +3,5 @@
 include dldemo/dldemo.yaml
 include dldemo/examples/template/xls-d.html
 include dldemo/examples/template/base3.html
+include dldemo/examples/template/base4.html
+include dldemo/api/templates/ *

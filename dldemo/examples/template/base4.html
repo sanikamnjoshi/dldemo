@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{mytitle}}</title>
+  {% raw rsc %}
+</head>
+<body>
+  <div id="myplot"></div>
+  <script>
+  fetch('/dldemo/examples/chart_multiple')
+    .then(
+        function(response) {
+            return response.json().then(
+                function(res) {
+                    return res["data"]
+                }
+            )
+        }
+    )
+    .then(
+        function(item) {
+            return Bokeh.embed.embed_item(item)
+        }
+    )
+  </script>
+</body>
+</html>
