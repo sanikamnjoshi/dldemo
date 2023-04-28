@@ -5,6 +5,7 @@ collection:
   data: !connect mongodb://data
   temp: !connect mongodb://temp
   data_processed: !connect mongodb://data_processed
+  perm_demo: !connect mongodb://perm_demo
 
 
 api:
